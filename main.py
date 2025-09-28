@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, status
 from fastapi.exceptions import  HTTPException
 from fastapi.responses import Response
 from database.database import Base, engine, get_db, SessionLocal
@@ -20,7 +20,16 @@ def list_fishes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     if fishes is None:
         return[]
     return fishes
-
+@app.get("/fishes/{fish_id}", response_model=FishResponse)
+def return_numbered_fish(fish_id : int, db: Session = Depends(get_db)):
+    numbered_fish = db.query(Fish).filter(Fish.id == fish_id).first()
+    if numbered_fish: 
+        return numbered_fish
+    else:
+        raise HTTPException(
+            status_code=404,
+            detail="Fish with this number does not exists"
+        )
 @app.post("/add_fish/", response_model= FishResponse)
 def add_fishes(fish_data: FishBase,  db: Session = Depends(get_db)):
     existinbg_fish = db.query(Fish).filter(Fish.name == fish_data.name).first()
@@ -42,3 +51,42 @@ def add_fishes(fish_data: FishBase,  db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_fish)
     return new_fish
+@app.put("/chagge_fish{fish_id}", 
+         response_model=FishResponse)
+def change_fish_data(fish_id: int,
+                     fish_update_data : FishBase,
+                     db:Session = Depends(get_db)):
+    
+    existing_fish = db.query(Fish).filter(Fish.id == fish_id).first()
+    if not existing_fish:
+        raise HTTPException(
+            status_code=404,
+            detail="There`s no such fish, thus you can not modify it"
+        )
+    location_list = []
+    for loc_data in fish_update_data.locations:
+        exsisting_loc = db.query(Location).filter(Location.name == loc_data.name).first()
+        if exsisting_loc:
+            location_list.append(exsisting_loc)
+        else:
+            new_loc = Location(name = loc_data.name, region = loc_data.region)
+            db.add(new_loc)
+            location_list.append(new_loc)
+    existing_fish.name = fish_update_data.name
+    existing_fish.description = fish_update_data.description
+    existing_fish.locations = location_list
+    db.commit()
+    db.refresh(existing_fish)
+
+    return existing_fish
+@app.delete("/delete/{fish_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_numbrered_fish(fish_id : int, db: Session = Depends(get_db)):
+    existing_fish = db.query(Fish).filter(Fish.id == fish_id).first()
+    if not existing_fish:
+        raise HTTPException(
+            status_code= 404,
+            detail="No such fish found"
+        )
+    db.delete(existing_fish)
+    db.commit()
+    return(Response(status_code=status.HTTP_204_NO_CONTENT))
