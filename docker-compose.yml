@@ -1,0 +1,44 @@
+services: 
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/postgres_username
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres
+      POSTGRES_DB_FILE: /run/secrets/postgres_db
+    secrets:
+      - postgres_username
+      - postgres
+      - postgres_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    image: elestio/pgadmin
+    container_name: pgadmin_container
+    restart : always
+    environment:
+      PGADMIN_DEFAULT_EMAIL : admin@example.com
+      PGADMIN_DEFAULT_PASSWORD_FILE : /run/secrets/pgadmin
+    secrets:
+      - pgadmin
+    ports:
+     - "5050:80"
+    depends_on:
+     - db
+
+secrets:
+  postgres_username:
+    file: ./secrets/postgres_user.txt 
+  postgres:
+    file: ./secrets/postgres.txt
+  postgres_db:
+    file: ./secrets/postgres_db_name.txt
+  pgadmin:
+    file: ./secrets/pgadmin.txt
+
+
+volumes:
+  postgres_data:

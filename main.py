@@ -1,53 +1,44 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.exceptions import  HTTPException
 from fastapi.responses import Response
-from models.models import Fish
+from database.database import Base, engine, get_db, SessionLocal
+from database.database_models import Fish, Location
+from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from models.models import  FishResponse, FishBase
+from typing import List
 app = FastAPI()
-fishes =[{"name": "Carasius", "UID": 1, "description":"Add some description text here", "Location":"Krakow"},
-        {"name": "Bream", "UID": 2, "description":"Add some description text here", "Location":"Wroclaw"},
-         {"name": "Roach", "UID": 3, "description":"Add some description text here", "Location":"Warsawa"} ] 
-
+Base.metadata.create_all(bind = engine)
+get_db()
 @app.get("/")
-async def hellWorld():
-    return{"Hello": "World"}
-@app.get("/fishes")
-async def list_fishes():
+async def hello_world():
+    return{"message": "Hello world"}
+
+@app.get("/fishes/", response_model=List[FishResponse])
+def list_fishes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    fishes  = db.query(Fish).offset(skip).limit(limit).all()
+    if fishes is None:
+        return[]
     return fishes
-@app.get("/fish/{id}")
-async def return_numbered_fish(id : int):
-    for record in fishes:
-        if record.get("UID") == id:
-            return {"fish": record}
-    raise HTTPException(status_code=404)
 
+@app.post("/add_fish/", response_model= FishResponse)
+def add_fishes(fish_data: FishBase,  db: Session = Depends(get_db)):
+    existinbg_fish = db.query(Fish).filter(Fish.name == fish_data.name).first()
+    if existinbg_fish:
+        raise HTTPException(
+            status_code=409,
+            detail="Fish with this name already exist"
+        )
+    fish_dict = fish_data.dict(exclude={'locations'})
+    new_fish = Fish(**fish_dict)
 
-@app.post("/add_fish/")
-async def fish_adder( Fish : Fish | None):
-    for record in fishes:
-        if Fish.id == record.get("UID"):
-            raise HTTPException(status_code=403)
-    
-    if(fishes.insert(Fish.id, Fish.name)):
-        return Response(status_code=200)
-
-
-@app.put("/rewrite_fish_details/")
-async  def rewrite_fish_details(Fish : Fish | None):
-    for record in fishes:
-        if Fish.id == record["UID"]:
-            record.update(Fish)
-            return Response(status_code=200)
-
-@app.delete("/delete/{id}")
-async def delete_fish(id : int):
-    for num, record in enumerate(fishes):
-        if id == record["UID"]:
-            fishes.remove(record)
-            return
-    return HTTPException(404)    
-
-@app.delete("/delete/all/")
-async def delete_all():
-    for _, record   in enumerate(fishes):
-        fishes.remove(record)
-    return
+    for loc_data in fish_data.locations:
+        location_obj = db.query(Location).filter(Location.name == loc_data.name).first()
+        if not location_obj:
+            location_obj = Location(**loc_data.dict())
+            db.add(location_obj)
+        new_fish.locations.append(location_obj)
+    db.add(new_fish)
+    db.commit()
+    db.refresh(new_fish)
+    return new_fish
