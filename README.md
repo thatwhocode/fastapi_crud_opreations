@@ -1,70 +1,69 @@
-# That`s a dev branch for my Async CRUD backend aplication
+# RESTful API for Fish & Location Management
 
 ## Project description and main idea
-**That`s a  RESTful API for Fish&Location Management**
+This is a fully functional RESTful API, created to manage data about fishes and their locations. Originally created as part of a future social project for fishermen, it demonstrates modern backend development techniques, using asynchronous technologies and containerization.
 
-Its a fully functional RESTful API, created to manage data about fishes and their location.Originnally created as a part of future social project for fishermans. It shows modern techniques to backend developing, usign async technologies and contenerization
+The API implements full **CRUD** (Create, Read, Update, Delete) functionality.
 
-API release full CRUD(Create, Read, Update, Delete) fucntional
+---
 
 ## Key technologies
 
- - **FastAPI** - highly productive Python web framework
- - **PosgreSQL** safe database to store a lot of data in future
- - **SQLAlchemy ORM** library for database operation, used in async way with *asyncpg*
- - **Docker and Docker compose** - Allows to konterize all of tech stack in different runnig environments
- - **Pydantic** - Autovalidation library used with FastAPI
+- **FastAPI**: A highly productive Python web framework.
+- **PostgreSQL**: A safe database for storing data.
+- **SQLAlchemy ORM**: A library for database operations, used in an async way with **asyncpg**.
+- **Docker and Docker Compose**: Tools for containerizing the entire tech stack for different running environments.
+- **Pydantic**: An autovalidation library used with FastAPI.
+
+---
 
 ## Project structure
 
-* Project setteld in a way to optimize developing of a project, so that user(or me) can add additional functional in a short term *
+The project is set up to optimize development, so that a user (or me) can add additional functionality in a short term.
+
+---
 
 ## How to run locally
- -  First thing first - make sure you have *Docker and Docker compose* installed
- -  Make sure you have Python 3.8+ installed
 
-### 1.Clone the project
-```
-git clone https://github.com/thatwhocode/fastapi_crud_opreations.git
-cd fast_api_crud_operations
-```
+### 1. Prerequisites
+- **Docker** and **Docker Compose** installed.
+- **Python 3.8+** installed.
 
-### 2. In order to run project you need to create several files
- - **.env**
-Used for local connection to database
-
-``` POSTGRES_USER=dev
-    POSTGRES_PASSWORD=my_secret_password
-    POSTGRES_DB=dev_db
-    POSTGRES_HOST=localhost
-    POSTGRES_PORT=5433
+### 2. Clone the project
+Clone the repository from GitHub:
+```bash
+git clone [https://github.com/thatwhocode/fastapi_crud_opreations.git](https://github.com/thatwhocode/fastapi_crud_opreations.git)
+cd fastapi_crud_opreations
 ```
 
-## Make sure you have #exactly  same in your docker-compose file **
+### 3. Docker secrets
+#### This project uses Docker Secrets for secure credentials. You will need to create the secrets directory and the necessary files if they don't already exist :
+```
+mkdir secrets
+touch secrets/postgres_user.txt
+touch secrets/postgres.txt
+touch secrets/postgres_db_name.txt
+touch secrets/pgadmin.txt
+```
+### Note: Fill these files with your credentials. For example, postgres_user.txt should contain your PostgreSQL username.
 
-### Docker secrets in project:
-** Project build using Docker secrets, so in order top get everything works: **
- - **```cd fastapi_with_crud_operations```**
- - **``` mkdir secrets```**
- - **```touch postgres_user.txt &  touch posgres.txt & touch  postgres_db_name.txt & touch pgadmin.txt```**
-### File docker-compose works with all of this files, and mounting them into working containers
+### 4. Docker Compose deployment
+```
+docker compose up --build -d
 
-
-### 3.Docker compose deploying
-** ``` docker compose up --build``` **
-```--build``` you`ll only need at first
-
+```
+### **Note:** the ```--build``` falg is only needed for the first run or after code changes. The ```-d``` flags runs container in the background
 
 ## API endpoint
 ### API allows next methods and endpoint:
- - ``` GET /fishes/``` - lists all fishes
+ - ```GET /fishes/``` - lists all fishes
  - ```Get /fishes/{fish_id}``` - list fish with required number or ```404``` if fish doesn`t exist```
  - ```POST /fishes/``` - adding another fish to DB, if fish name not in DB already
  - ```PUT /fishes/{fish_id}``` - changes fish with ```fish_id``` credentials
  - ```DELETE /fishes/{fish_id}``` - deletes fish with ```fish_id```
 ## API documentation
- - *Swagger UI*: ```http://localhost:8000/docs```
- - *ReDOC*: ``http://localhost:8000/redoc
+ - * Swagger UI *: ```http://localhost:8000/docs```
+ - * ReDOC *: ```http://localhost:8000/redoc```
 
 
 
