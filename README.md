@@ -62,8 +62,8 @@ docker compose up --build -d
  - ```PUT /fishes/{fish_id}``` - changes fish with ```fish_id``` credentials
  - ```DELETE /fishes/{fish_id}``` - deletes fish with ```fish_id```
 ## API documentation
- - * Swagger UI *: ```http://localhost:8000/docs```
- - * ReDOC *: ```http://localhost:8000/redoc```
+ - **Swagger UI**: ```http://localhost:8000/docs```
+ - **ReDOC**: ```http://localhost:8000/redoc```
 
 
 
