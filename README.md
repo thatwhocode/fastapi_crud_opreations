@@ -3,11 +3,11 @@
 ## Project description and main idea
 **That`s a  RESTful API for Fish&Location Management**
 
-It`s a fully functional RESTful API, created to manage data about fishes and their location.Originnally created as a part of future social project for fishermans. It show`s modern techniques to backend developing, usign asycn technologies and conterization
+Its a fully functional RESTful API, created to manage data about fishes and their location.Originnally created as a part of future social project for fishermans. It shows modern techniques to backend developing, usign async technologies and contenerization
 
 API release full CRUD(Create, Read, Update, Delete) fucntional
 
-##Key technologies
+## Key technologies
 
  - **FastAPI** - highly productive Python web framework
  - **PosgreSQL** safe database to store a lot of data in future
@@ -17,9 +17,9 @@ API release full CRUD(Create, Read, Update, Delete) fucntional
 
 ## Project structure
 
-*Project setteld in a way to optimize developing of a project, so that user(or me) can add additional functional in a short term*
+* Project setteld in a way to optimize developing of a project, so that user(or me) can add additional functional in a short term *
 
-##How to run locally
+## How to run locally
  -  First thing first - make sure you have *Docker and Docker compose* installed
  -  Make sure you have Python 3.8+ installed
 
@@ -32,18 +32,26 @@ cd fast_api_crud_operations
 ### 2. In order to run project you need to create several files
  - **.env**
 Used for local connection to database
-```
-POSTGRES_USER=dev
-POSTGRES_PASSWORD=my_secret_password
-POSTGRES_DB=dev_db
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5433
+
+``` POSTGRES_USER=dev
+    POSTGRES_PASSWORD=my_secret_password
+    POSTGRES_DB=dev_db
+    POSTGRES_HOST=localhost
+    POSTGRES_PORT=5433
 ```
 
-**Make sure you have #exactly#  same in your docker-compose file**
+## Make sure you have #exactly  same in your docker-compose file **
+
+### Docker secrets in project:
+** Project build using Docker secrets, so in order top get everything works: **
+ - **```cd fastapi_with_crud_operations```**
+ - **``` mkdir secrets```**
+ - **```touch postgres_user.txt &  touch posgres.txt & touch  postgres_db_name.txt & touch pgadmin.txt```**
+### File docker-compose works with all of this files, and mounting them into working containers
+
 
 ### 3.Docker compose deploying
-``` docker compose up --build```
+** ``` docker compose up --build``` **
 ```--build``` you`ll only need at first
 
 
