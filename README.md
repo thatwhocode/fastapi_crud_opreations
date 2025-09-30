@@ -32,12 +32,12 @@ The project is set up to optimize development, so that a user (or me) can add ad
 ### 2. Clone the project
 Clone the repository from GitHub:
 ```bash
-git clone [https://github.com/thatwhocode/fastapi_crud_opreations.git](https://github.com/thatwhocode/fastapi_crud_opreations.git)
+git clone [https://github.com/thatwhocodefastapi_crud_opreations.git]
 cd fastapi_crud_opreations
 ```
 
 ### 3. Docker secrets
-#### This project uses Docker Secrets for secure credentials. You will need to create the secrets directory and the necessary files if they don't already exist :
+### This project uses Docker Secrets for secure credentials. You will need to create the secrets directory and the necessary files if they don't already exist :
 ```
 mkdir secrets
 touch secrets/postgres_user.txt
@@ -65,7 +65,10 @@ docker compose up --build -d
  - **Swagger UI**: ```http://localhost:8000/docs```
  - **ReDOC**: ```http://localhost:8000/redoc```
 
-
+## Future plans:
+ - **Add user Authentication** 
+ - **Implement caching**
+ - **Write unit and integration tests**
 
 
 
