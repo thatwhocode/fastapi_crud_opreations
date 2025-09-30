@@ -22,7 +22,7 @@ class Location(Base):
 class  Fish(Base):
     __tablename__ = "fishes"
     id = Column(Integer, primary_key=True, nullable= False)
-    name = Column(String, index=True)
+    name = Column(String, index=True, unique=True)
     description = Column(String, nullable= True)
     locations = relationship("Location",
                              secondary=association_table,
