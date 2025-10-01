@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Depends, status
 from fastapi.exceptions import  HTTPException
 from fastapi.responses import Response
-from database.database import init_db_tables, get_db
+from database.database import  get_db, init_db_resources
 from database.database_models import Fish, Location
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import  selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
 from models.models import  FishResponse, FishBase
 from typing import List
 from sqlalchemy import select
@@ -15,12 +16,13 @@ from sqlalchemy.exc import NoResultFound
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        await init_db_tables()
+        await init_db_resources()
+        await get_db()
         yield app
     except Exception as e: 
         print(e)
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 async def hello_world():

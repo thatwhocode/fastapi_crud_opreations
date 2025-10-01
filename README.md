@@ -19,40 +19,12 @@ The API implements full **CRUD** (Create, Read, Update, Delete) functionality.
 
 ## Project structure
 
-The project is set up to optimize development, so that a user (or me) can add additional functionality in a short term.
+**The project is set up to be deployed with one single command. To see more about project see ```dev```` branch**
 
----
-
-## How to run locally
-
-### 1. Prerequisites
-- **Docker** and **Docker Compose** installed.
-- **Python 3.8+** installed.
-
-### 2. Clone the project
-Clone the repository from GitHub:
-```bash
-git clone [https://github.com/thatwhocodefastapi_crud_opreations.git]
-cd fastapi_crud_opreations
-```
-
-### 3. Docker secrets
-### This project uses Docker Secrets for secure credentials. You will need to create the secrets directory and the necessary files if they don't already exist :
-```
-mkdir secrets
-touch secrets/postgres_user.txt
-touch secrets/postgres.txt
-touch secrets/postgres_db_name.txt
-touch secrets/pgadmin.txt
-```
-### Note: Fill these files with your credentials. For example, postgres_user.txt should contain your PostgreSQL username.
-
-### 4. Docker Compose deployment
 ```
 docker compose up --build -d
-
 ```
-### **Note:** the ```--build``` falg is only needed for the first run or after code changes. The ```-d``` flags runs container in the background
+
 
 ## API endpoint
 ### API allows next methods and endpoint:
@@ -64,11 +36,6 @@ docker compose up --build -d
 ## API documentation
  - **Swagger UI**: ```http://localhost:8000/docs```
  - **ReDOC**: ```http://localhost:8000/redoc```
-
-## Future plans:
- - **Add user Authentication** 
- - **Implement caching**
- - **Write unit and integration tests**
 
 
 

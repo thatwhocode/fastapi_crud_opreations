@@ -1,4 +1,5 @@
 services: 
+  
   db:
     image: postgres:13
     container_name: postgres_db
@@ -7,6 +8,12 @@ services:
       POSTGRES_USER_FILE: /run/secrets/postgres_username
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres
       POSTGRES_DB_FILE: /run/secrets/postgres_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $POSTGRES_DB -U $POSTGRES_USER"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     secrets:
       - postgres_username
       - postgres
@@ -15,6 +22,19 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  api:
+    build : ./app
+    container_name: fastapi_cont
+    restart: always
+    ports: 
+     - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    secrets:
+      - postgres_username
+      - postgres
+      - postgres_db
   pgadmin:
     image: elestio/pgadmin
     container_name: pgadmin_container
@@ -31,13 +51,13 @@ services:
 
 secrets:
   postgres_username:
-    file: ./secrets/postgres_user.txt 
+    file: ./app//secrets/postgres_user.txt 
   postgres:
-    file: ./secrets/postgres.txt
+    file: ./app/secrets/postgres.txt
   postgres_db:
-    file: ./secrets/postgres_db_name.txt
+    file: ./app/secrets/postgres_db_name.txt
   pgadmin:
-    file: ./secrets/pgadmin.txt
+    file: ./app/secrets/pgadmin.txt
 
 
 volumes:
