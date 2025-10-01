@@ -24,6 +24,7 @@ The API implements full **CRUD** (Create, Read, Update, Delete) functionality.
 ```
 docker compose up --build -d
 ```
+**Note - Im still making changes in order to deploy project with one single command**
 
 
 ## API endpoint
