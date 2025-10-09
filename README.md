@@ -29,9 +29,11 @@ mkdir secrets
 
 ``` 
 echo -n "dev" > secrets/postgres_user.txt
+```
 
 ```
 echo -n "my_secret_password" > secrets/postgres.txt
+```
 
 ```
 echo -n "dev_db" > secrets/postgres_db_name.txt
