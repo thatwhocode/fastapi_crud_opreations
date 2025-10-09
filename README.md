@@ -49,8 +49,8 @@ echo -n "pgadmin_password" > secrets/pgadmin.txt
 ```
 docker compose up --build -d
 ```
-**Note - Im still making changes in order to deploy project with one single command**
-
+~~Note - Im still making changes in order to deploy project with one single command~~
+**Easy Deployment**
 
 ## API endpoint
 ### API allows next methods and endpoint:
