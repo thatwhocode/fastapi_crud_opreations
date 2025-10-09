@@ -12,9 +12,9 @@ def get_database_url():
     try:
         with open('/run/secrets/postgres', 'r') as f:
             postgres_password = f.read().strip()
-        with open('/run/secrets/postgres_user', 'r') as f:
+        with open('/run/secrets/postgres_username', 'r') as f:
             postgres_user = f.read().strip()
-        with open('/run/secrets/postgres_db_name', 'r') as f:
+        with open('/run/secrets/postgres_db', 'r') as f:
             postgres_db_name = f.read().strip()
         postgres_host = 'db'
         postgres_port = '5432'
@@ -32,15 +32,14 @@ async def init_db_resources():
     DATABASE_URL =  get_database_url()
     engine = create_async_engine(DATABASE_URL)
     SessionLocal = async_sessionmaker( bind=engine)
-    Base =  await declarative_base()
-
+    Base =   declarative_base()
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all())
+        await conn.run_sync(Base.metadata.create_all)
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     try: 
-        async with SessionLocal as session:
+        async with SessionLocal() as session:
             yield session
     finally:
         pass

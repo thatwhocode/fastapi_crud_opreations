@@ -17,10 +17,11 @@ from sqlalchemy.exc import NoResultFound
 async def lifespan(app: FastAPI):
     try:
         await init_db_resources()
-        await get_db()
         yield app
     except Exception as e: 
         print(e)
+    finally:
+        pass
 
 app = FastAPI(lifespan=lifespan)
 
