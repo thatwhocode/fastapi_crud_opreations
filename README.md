@@ -18,8 +18,31 @@ The API implements full **CRUD** (Create, Read, Update, Delete) functionality.
 ---
 
 ## Project structure
+## Pre deployments requirements:
+```
+cd app/
+```
+``` 
+mkdir secrets
+```
+**Make sure you have your secrets folder in .gitignore file**
 
-**The project is set up to be deployed with one single command. To see more about project see ```dev```` branch**
+``` 
+echo -n "dev" > secrets/postgres_user.txt
+
+```
+echo -n "my_secret_password" > secrets/postgres.txt
+
+```
+echo -n "dev_db" > secrets/postgres_db_name.txt
+```
+
+```
+echo -n "pgadmin_password" > secrets/pgadmin.txt
+```
+
+
+**The project is set up to be deployed with one single command. To see more about project see dev branch**
 
 ```
 docker compose up --build -d
