@@ -1,5 +1,23 @@
 services: 
-  
+  users_db:
+    image: postgres:13
+    container_name: user_db_cont
+    restart: always
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/users_db_user
+      POSTGRES_DB_FILE: /run/secrets/users_db_name
+      POSTGRES_PASSWORD_FILE: /run/secrets/password_file
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+    secrets:
+     - users_db_name
+     - users_db_user
+     - password_file
+    volumes:
+      - postgres_users_data:/var/lib/postgresql/data
   db:
     image: postgres:13
     container_name: postgres_db
@@ -57,7 +75,13 @@ secrets:
     file: ./app/secrets/postgres_db_name.txt
   pgadmin:
     file: ./app/secrets/pgadmin.txt
-
+  users_db_user:
+    file: auth/secrets/users_db_username.txt
+  users_db_name:
+    file: auth/secrets/users_db.txt
+  password_file:
+    file: auth/secrets/password_file.txt
 
 volumes:
   postgres_data:
+  postgres_users_data:
